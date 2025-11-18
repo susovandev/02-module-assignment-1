@@ -1,7 +1,11 @@
 import express from 'express';
 import type { Application, Request, Response } from 'express';
+import morganConfig from './config/morgan.config';
 
 const app: Application = express();
+
+// Morgan middleware
+app.use(morganConfig);
 
 // Body-parser middleware
 app.use(express.json());
