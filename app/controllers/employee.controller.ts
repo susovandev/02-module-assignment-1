@@ -4,7 +4,23 @@ import ApiResponse from '../utils/apiResponse.utils';
 import Logger from '../utils/logger.utils';
 import employeeService from '../services/employee.service';
 class EmployeeController {
-	async createProductHandler(req: Request, res: Response, next: NextFunction) {
+	async fetchEmployeeHandler(req: Request, res: Response, next: NextFunction) {
+		try {
+			Logger.info(`[EmployeeController] Fetch employee request received with id: ${req.params.id}`);
+
+			// Delegate core logic to service layer
+			const product = await employeeService.findById(req.params.id);
+
+			// Send structured API response
+			return res
+				.status(StatusCodes.OK)
+				.json(new ApiResponse(StatusCodes.OK, 'Employee fetched successfully', product));
+		} catch (error) {
+			Logger.warn('[EmployeeController] Error fetching employee', error);
+			next(error);
+		}
+	}
+	async createEmployeeHandler(req: Request, res: Response, next: NextFunction) {
 		try {
 			Logger.info(`[EmployeeController] Create employee request received`);
 

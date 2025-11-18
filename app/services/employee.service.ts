@@ -1,7 +1,26 @@
 import employeeModel, { type IEmployeeDocument } from '../model/employee.model';
-import { ConflictException, InternalServerException } from '../utils/apiError.utils';
+import {
+	ConflictException,
+	InternalServerException,
+	NotFoundException,
+} from '../utils/apiError.utils';
 import Logger from '../utils/logger.utils';
 class EmployeeService {
+	async findById(employeeId: string) {
+		try {
+			Logger.info(`[EmployeeService] Find Employee request received with id: ${employeeId}`);
+
+			const employee = await employeeModel.findById(employeeId).lean();
+			if (!employee) {
+				throw new NotFoundException('Employee not found for given ID');
+			}
+
+			return employee;
+		} catch (error) {
+			Logger.warn('[EmployeeService] Error finding Employee', error);
+			throw error;
+		}
+	}
 	async create(employeeData: Omit<IEmployeeDocument, 'createdAt' | 'updatedAt'>) {
 		try {
 			Logger.info(
