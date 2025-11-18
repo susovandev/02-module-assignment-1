@@ -23,3 +23,11 @@ export const validateId = Joi.object({
 			'any.required': 'Product ID is required.',
 		}),
 });
+
+export const updateValidationSchema = Joi.object().keys({
+	name: Joi.string().optional().min(3).max(50),
+	email: Joi.string().optional().email().min(5).max(50),
+	department: Joi.string().optional().min(2).max(50),
+	position: Joi.string().optional().min(3).max(50),
+	salary: Joi.number().optional().positive().precision(2),
+});

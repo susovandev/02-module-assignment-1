@@ -9,12 +9,12 @@ class EmployeeController {
 			Logger.info(`[EmployeeController] Fetch employee request received with id: ${req.params.id}`);
 
 			// Delegate core logic to service layer
-			const product = await employeeService.findById(req.params.id);
+			const employee = await employeeService.findById(req.params.id);
 
 			// Send structured API response
 			return res
 				.status(StatusCodes.OK)
-				.json(new ApiResponse(StatusCodes.OK, 'Employee fetched successfully', product));
+				.json(new ApiResponse(StatusCodes.OK, 'Employee fetched successfully', employee));
 		} catch (error) {
 			Logger.warn('[EmployeeController] Error fetching employee', error);
 			next(error);
@@ -33,6 +33,24 @@ class EmployeeController {
 				.json(new ApiResponse(StatusCodes.CREATED, 'Employee created successfully', newEmployee));
 		} catch (error) {
 			Logger.warn('[EmployeeController] Error creating employee', error);
+			next(error);
+		}
+	}
+	async updateEmployeeHandler(req: Request, res: Response, next: NextFunction) {
+		try {
+			Logger.info(
+				`[EmployeeController] update employee request received with id: ${req.params.id}`,
+			);
+
+			// Delegate core logic to service layer
+			const updatedEmployee = await employeeService.update(req.params.id, req.body);
+
+			// Send structured API response
+			return res
+				.status(StatusCodes.OK)
+				.json(new ApiResponse(StatusCodes.OK, 'Employee updated successfully', updatedEmployee));
+		} catch (error) {
+			Logger.warn('[EmployeeController] Error update a employee', error);
 			next(error);
 		}
 	}

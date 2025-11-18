@@ -43,6 +43,28 @@ class EmployeeService {
 			throw error;
 		}
 	}
+	async update(
+		employeeId: string,
+		employeeData: Partial<Omit<IEmployeeDocument, 'createdAt' | 'updatedAt'>>,
+	) {
+		try {
+			Logger.info(
+				`[EmployeeService] update employee request received with id: ${employeeId} and input: ${JSON.stringify(employeeData)}`,
+			);
+
+			const updatedEmployee = await employeeModel.findByIdAndUpdate(employeeId, employeeData, {
+				new: true,
+			});
+			if (!updatedEmployee) {
+				throw new NotFoundException('employee not found for given ID');
+			}
+
+			return updatedEmployee;
+		} catch (error) {
+			Logger.warn('[EmployeeService] Error updating employee', error);
+			throw error;
+		}
+	}
 }
 
 export default new EmployeeService();
