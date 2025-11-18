@@ -2,6 +2,7 @@ import express from 'express';
 import type { Application, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import morganConfig from './config/morgan.config';
+import routeNotFoundHandler from './middlewares/notFound.middleware';
 
 const app: Application = express();
 
@@ -20,5 +21,8 @@ app.get('/', (req: Request, res: Response) => {
 		message: 'Hello World!',
 	});
 });
+
+// 404 Route
+app.use(routeNotFoundHandler);
 
 export default app;
