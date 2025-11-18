@@ -4,6 +4,21 @@ import ApiResponse from '../utils/apiResponse.utils';
 import Logger from '../utils/logger.utils';
 import employeeService from '../services/employee.service';
 class EmployeeController {
+	async fetchEmployeesHandler(req: Request, res: Response, next: NextFunction) {
+		try {
+			Logger.info(`[EmployeeController] Fetch employee request received`);
+			// Delegate core logic to service layer
+			const employees = await employeeService.findAll(req.query);
+
+			// Send structured API response
+			return res
+				.status(StatusCodes.OK)
+				.json(new ApiResponse(StatusCodes.OK, 'Employees fetched successfully', employees));
+		} catch (error) {
+			Logger.warn('[EmployeeController] Error fetching employees', error);
+			next(error);
+		}
+	}
 	async fetchEmployeeHandler(req: Request, res: Response, next: NextFunction) {
 		try {
 			Logger.info(`[EmployeeController] Fetch employee request received with id: ${req.params.id}`);
@@ -51,6 +66,24 @@ class EmployeeController {
 				.json(new ApiResponse(StatusCodes.OK, 'Employee updated successfully', updatedEmployee));
 		} catch (error) {
 			Logger.warn('[EmployeeController] Error update a employee', error);
+			next(error);
+		}
+	}
+	async deleteEmployeeHandler(req: Request, res: Response, next: NextFunction) {
+		try {
+			Logger.info(
+				`[EmployeeController] delete employee request received with id: ${req.params.id}`,
+			);
+
+			// Delegate core logic to service layer
+			await employeeService.delete(req.params.id);
+
+			// Send structured API response
+			return res
+				.status(StatusCodes.OK)
+				.json(new ApiResponse(StatusCodes.OK, 'Employee deleted successfully'));
+		} catch (error) {
+			Logger.warn('[EmployeeController] Error delete a employee', error);
 			next(error);
 		}
 	}

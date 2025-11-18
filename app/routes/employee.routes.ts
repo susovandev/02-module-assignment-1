@@ -9,6 +9,7 @@ import {
 
 const router = Router();
 
+router.route('/').get(employeeController.fetchEmployeesHandler);
 router
 	.route('/:id')
 	.get(validateRequest(validateId, 'params'), employeeController.fetchEmployeeHandler);
@@ -22,4 +23,7 @@ router
 		validateRequest(updateValidationSchema),
 		employeeController.updateEmployeeHandler,
 	);
+router
+	.route('/:id')
+	.delete(validateRequest(validateId, 'params'), employeeController.deleteEmployeeHandler);
 export default router;
