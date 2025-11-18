@@ -23,6 +23,10 @@ app.get('/', (req: Request, res: Response) => {
 	});
 });
 
+// Employee Routes
+import employeeRoutes from './routes/employee.routes';
+app.use('/api/employees', employeeRoutes);
+
 // 404 Route
 app.use(routeNotFoundHandler);
 

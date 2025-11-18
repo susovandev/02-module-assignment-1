@@ -1,0 +1,25 @@
+import type { Request, Response, NextFunction } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import ApiResponse from '../utils/apiResponse.utils';
+import Logger from '../utils/logger.utils';
+import employeeService from '../services/employee.service';
+class EmployeeController {
+	async createProductHandler(req: Request, res: Response, next: NextFunction) {
+		try {
+			Logger.info(`[EmployeeController] Create employee request received`);
+
+			// Delegate core logic to service layer
+			const newEmployee = await employeeService.create(req.body);
+
+			// Send structured API response
+			return res
+				.status(StatusCodes.CREATED)
+				.json(new ApiResponse(StatusCodes.CREATED, 'Employee created successfully', newEmployee));
+		} catch (error) {
+			Logger.warn('[EmployeeController] Error creating employee', error);
+			next(error);
+		}
+	}
+}
+
+export default new EmployeeController();

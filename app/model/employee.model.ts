@@ -37,7 +37,7 @@ const employeeSchema = new Schema<IEmployeeDocument>(
 );
 
 employeeSchema.index({ email: 1 }, { unique: true });
-employeeSchema.index({ name: 1, department: 1 }, { unique: true });
+employeeSchema.index({ name: 1, department: 1 });
 
 const employeeModel = model<IEmployeeDocument>('Employee', employeeSchema);
 
