@@ -1,5 +1,6 @@
 import express from 'express';
 import type { Application, Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import morganConfig from './config/morgan.config';
 
 const app: Application = express();
@@ -13,8 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Home Routes
 app.get('/', (req: Request, res: Response) => {
-	return res.status(200).json({
-		statusCode: 200,
+	return res.status(StatusCodes.OK).json({
+		statusCode: StatusCodes.OK,
 		status: true,
 		message: 'Hello World!',
 	});
